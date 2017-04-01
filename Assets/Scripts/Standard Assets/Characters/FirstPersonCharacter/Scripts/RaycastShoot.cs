@@ -20,6 +20,7 @@ public class RaycastShoot : MonoBehaviour {
 
     void Awake()
     {
+        
         lineRenderer = GetComponent<LineRenderer>();
         source = GetComponent<AudioSource>();
         fpsCam = GetComponentInParent<Camera>();

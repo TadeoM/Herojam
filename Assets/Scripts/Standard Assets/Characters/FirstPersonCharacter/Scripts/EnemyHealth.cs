@@ -7,30 +7,40 @@ public class EnemyHealth : MonoBehaviour, IDamageable {
     // attribute
     public int startingHealth;
     public GameObject hitParticles;
+    public Rigidbody rb;
+    public float deathTime;
 
 
     private int currentHealth;
 
-	void wake()
+	void Awake()
     {
         currentHealth = startingHealth;
+        Debug.Log(currentHealth);
     }
 	
 	// Update is called once per frame
 	public void Damage (int damage, Vector3 hitPoint) {
         Instantiate(hitParticles, hitPoint, Quaternion.identity);
-        currentHealth -= damage;
-        Debug.Log("Hit for " + damage + " health, current health: " + currentHealth);
+        Debug.Log(currentHealth);
+        currentHealth = currentHealth - 1;
+        Debug.Log("Hit for " + damage + " health, went from: " + currentHealth+damage + " to " + currentHealth);
           
-        if (currentHealth < 0)
+        if (currentHealth < 1)
         {
-            Defeated(); 
+            rb.isKinematic = false;
+            if (currentHealth <= 0)
+            {
+                StartCoroutine(ShowAndHide(this.gameObject));
+            }
+
         }
 	}
 
-	// deactivate the object
-	public void Defeated()
-	{
-		gameObject.SetActive (false);
-	}
+    IEnumerator ShowAndHide(GameObject go)
+    {
+        go.SetActive(true);
+        yield return new WaitForSeconds(deathTime);
+        go.SetActive(false);
+    }
 }
