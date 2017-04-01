@@ -6,8 +6,22 @@ public class fire : MonoBehaviour
 {
     public Animator animator;
 
+    // private bool isScoped = false; use this if we want to toggle scoped
+
     private void Update()
     {
-    
+        if (Input.GetButton("Fire2"))
+        {
+            animator.SetBool("scoped", true);
+        }
+        else
+        {
+            animator.SetBool("scoped", false);
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            animator.SetTrigger("fire");
+        }
     }
 }
