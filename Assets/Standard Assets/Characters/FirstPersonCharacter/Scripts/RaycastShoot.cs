@@ -10,6 +10,7 @@ public class RaycastShoot : MonoBehaviour {
     public GameObject hitParticles;
     public GameObject shootFlare;
     public int damage = 1;
+    public Transform gunEnd;
 
     private Camera fpsCam;
     private LineRenderer lineRenderer;
@@ -41,7 +42,24 @@ public class RaycastShoot : MonoBehaviour {
                 {
                     dmgScript.Damage(damage, hit.point);
                 }
+                if (hit.rigidbody != null)
+                    hit.rigidbody.AddForce(-hit.normal * 100f);
+
+                lineRenderer.SetPosition(0, gunEnd.position);
+                lineRenderer.SetPosition(1, hit.point);
+                Instantiate(hitParticles, hit.point, Quaternion.identity);
             } 
         }
 	}
+
+    private IEnumerator ShotEffect()
+    {
+        lineRenderer.enabled = true;
+        source.Play();
+        //smokeParticles.Play();
+        shootFlare.SetActive(true);
+        yield return shotLength;
+        lineRenderer.enabled = false;
+        shootFlare.SetActive(false);
+    }
 }

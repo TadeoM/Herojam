@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour {
+public class EnemyHealth : MonoBehaviour, IDamageable {
 
     // attribute
     public int startingHealth;
@@ -20,10 +20,17 @@ public class EnemyHealth : MonoBehaviour {
 	public void Damage (int damage, Vector3 hitPoint) {
         Instantiate(hitParticles, hitPoint, Quaternion.identity);
         currentHealth -= damage;
+        Debug.Log("Hit for " + damage + " health, current health: " + currentHealth);
           
-        if (startingHealth <= 0)
+        if (currentHealth < 0)
         {
-            Destroy(this);
+            Defeated(); 
         }
+	}
+
+	// deactivate the object
+	public void Defeated()
+	{
+		gameObject.SetActive (false);
 	}
 }
