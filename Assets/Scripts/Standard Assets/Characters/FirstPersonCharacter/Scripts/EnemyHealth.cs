@@ -10,11 +10,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable {
     public Rigidbody rb;
     public float deathTime;
 
+    public GameObject blood;
 
     private int currentHealth;
 
 	void Awake()
     {
+        blood.SetActive(false);
         currentHealth = startingHealth;
         Debug.Log(currentHealth);
     }
@@ -50,6 +52,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable {
     /// <returns></returns>
     IEnumerator ShowAndHide(GameObject go)
     {
+        blood.SetActive(true);
         yield return new WaitForSeconds(deathTime);
         go.SetActive(false);
     }
