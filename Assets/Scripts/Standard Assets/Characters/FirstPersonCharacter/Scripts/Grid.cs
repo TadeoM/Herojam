@@ -5,6 +5,7 @@ using UnityEngine;
 public class Grid : MonoBehaviour {
 
     // attriubtes
+    public Transform player;
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
@@ -37,11 +38,18 @@ public class Grid : MonoBehaviour {
         }
     }
 
-    //public Nodes NodeFromWorldPoint(Vector3 worldPosition)
-    //{
-    //    float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
-    //    return;
-    //}
+    public Nodes NodeFromWorldPoint(Vector3 worldPosition)
+    {
+        float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
+        float percentY = (worldPosition.y + gridWorldSize.y / 2) / gridWorldSize.y;
+        percentX = Mathf.Clamp01(percentX);
+        percentY = Mathf.Clamp01(percentY);
+
+        int x = Mathf.RoundToInt((gridSizeX-1) * percentX);
+        int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
+
+        return grid[x,y];
+    }
 
     void OnDrawGizmos()
     {
@@ -49,9 +57,12 @@ public class Grid : MonoBehaviour {
 
         if(grid != null)
         {
+            Nodes playerNode = NodeFromWorldPoint(player.position);
             foreach (Nodes n in grid)
             {
                 Gizmos.color = (n.walkable) ? Color.white : Color.red;
+                if (playerNode == n)
+                    Gizmos.color = Color.cyan;
                 Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter-.1f));
             }
         }
